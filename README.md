@@ -1,1 +1,2 @@
-# asl_sentence_classification_project
+# ASL Sentence Classification Project 
+
