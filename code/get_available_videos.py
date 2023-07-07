@@ -11,9 +11,9 @@ class GetAvailableVideos(object):
         self.csv_file_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\how2sign_data\how2sign_test.csv "
         self.zip_file_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\how2sign_data\test_raw_videos.zip"
         self.list_video_name = []
-        self.df_videos = []
+        self.df_videos = pd.DataFrame()
         self.save_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\how2sign_data\available_training_dataset_unclassified.csv"
-        self.df_filenames = []
+        self.df_filenames = pd.DataFrame()
 
     def create_list_video_names(self, csv_file_path, reformat = True):
         """
