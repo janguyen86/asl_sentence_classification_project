@@ -119,6 +119,9 @@ class DataAugmentation(object):
         return self.save_path_list, self.image_name_list
 
 class RunDataAugmentation(object):
+    """
+    Run data augmentation on a series of images from .csv file and saves results to new .csv.
+    """
     def __init__(self):
         self.dataaug = DataAugmentation()
         self.csv_train = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\orig_train_images_0.5.csv"
@@ -131,17 +134,29 @@ class RunDataAugmentation(object):
         self.train_aug_df = pd.DataFrame()
 
     def open_csv(self):
+        """
+        Opens image name, image path, and class of original images from .csv.
+        :return: None
+        """
         train_df = pd.read_csv(self.csv_train, sep="\t")
         self.list_orig_file_path = train_df["IMAGE_FILE_PATH"]
         self.list_orig_class = train_df["CLASS"]
 
     def save_csv(self):
+        """
+        Save image name, image path, and class of all new images created to .csv.
+        :return: None
+        """
         self.train_aug_df["IMAGE_NAME"] = self.list_aug_file_name
         self.train_aug_df["IMAGE_FILE_PATH"] = self.list_aug_file_path
         self.train_aug_df["CLASS"] = self.list_aug_class
         self.train_aug_df.to_csv(self.csv_save_path, sep="\t", index=False)
 
     def run_aug_images(self):
+        """
+        Run data augmentation for all images in .csv file and saves new image info to .csv.
+        :return: None 
+        """
         self.open_csv()
         for file_path, class_type in zip(self.list_orig_file_path, self.list_orig_class):
             self.dataaug.file_path = file_path
