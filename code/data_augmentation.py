@@ -48,7 +48,7 @@ class DataAugmentation(object):
             image = batch[0].astype('uint8')
             augmentation_type = "_rotated"
             full_save_path, image_name = self.generate_save_path(augmentation_type, i)
-            # save_img(full_save_path, image)
+            save_img(full_save_path, image)
             self.save_path_list.append(full_save_path)
             self.image_name_list.append(image_name)
 
@@ -67,7 +67,7 @@ class DataAugmentation(object):
             image = batch[0].astype('uint8')
             augmentation_type = "_hshift"
             full_save_path, image_name = self.generate_save_path(augmentation_type, i)
-            # save_img(full_save_path, image)
+            save_img(full_save_path, image)
             self.save_path_list.append(full_save_path)
             self.image_name_list.append(image_name)
 
@@ -86,7 +86,7 @@ class DataAugmentation(object):
             image = batch[0].astype('uint8')
             augmentation_type = "_vshift"
             full_save_path, image_name = self.generate_save_path(augmentation_type, i)
-            # save_img(full_save_path, image)
+            save_img(full_save_path, image)
             self.save_path_list.append(full_save_path)
             self.image_name_list.append(image_name)
 
@@ -105,7 +105,7 @@ class DataAugmentation(object):
             image = batch[0].astype('uint8')
             augmentation_type = "_resized"
             full_save_path, image_name = self.generate_save_path(augmentation_type, i)
-            # save_img(full_save_path, image)
+            save_img(full_save_path, image)
             self.save_path_list.append(full_save_path)
             self.image_name_list.append(image_name)
 
@@ -155,19 +155,18 @@ class RunDataAugmentation(object):
     def run_aug_images(self):
         """
         Run data augmentation for all images in .csv file and saves new image info to .csv.
-        :return: None 
+        :return: None
         """
         self.open_csv()
         for file_path, class_type in zip(self.list_orig_file_path, self.list_orig_class):
             self.dataaug.file_path = file_path
             save_path_list, image_name_list = self.dataaug.run()
-            self.list_aug_file_path.extend(save_path_list)
-            self.list_aug_file_name.extend(image_name_list)
-            list_new_class = [class_type for save_path in save_path_list]
+            list_new_class = [class_type for i in range(36)]
             self.list_aug_class.extend(list_new_class)
+        self.list_aug_file_path = save_path_list
+        self.list_aug_file_name = image_name_list
         self.save_csv()
 
 if __name__== "__main__":
     rundataaugmentation = RunDataAugmentation()
     rundataaugmentation.run_aug_images()
-    print("")

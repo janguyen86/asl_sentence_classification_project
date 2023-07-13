@@ -4,6 +4,7 @@ import cv2
 import math
 import pandas as pd
 from typing import Tuple, List
+
 class GetFrames(object):
   """
   Extracts the nth frame from a video where  0 < n < 1.
@@ -90,6 +91,6 @@ class RunGetFrames(object):
 
 if __name__ == "__main__":
   rungetframe = RunGetFrames()
-  rungetframe.csv_video_name_file_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\train.csv"
+  rungetframe.csv_video_name_file_path = r"/data_csv/train.csv"
   rungetframe.save_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\orig_train_images_0.5.csv"
   rungetframe.run_on_videos()
