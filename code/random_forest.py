@@ -1,18 +1,14 @@
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import pandas as pd
-from sklearn.model_selection import cross_validate
 from sklearn.decomposition import PCA
-from typing import Tuple
+from typing import Tuple, List
 import time
-from typing import List
-import os
 
 class RunRandomForestModel(object):
-  '''
+  """
   Runs Random Forest Model on data.
-  '''
+  """
   def __init__(self):
     self.x_train_aug_file_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\train_all_angle_o9_0.5.csv"
     self.y_train_aug_file_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\train_all_class_o9_0.5.csv"
@@ -39,32 +35,16 @@ class RunRandomForestModel(object):
     """
     Read .csv file as pd.DataFrame
     :param file_path:
-    :return:
+    :return: None
     """
     df = pd.read_csv(file_path)
     return df
 
-  def k_fold_validation(self, clf):
-    """
-    Perform k-fold validation on dataset for k = 5, 7 and 10.
-    :param clf:
-    :return:
-    """
-    scores_5 = cross_validate(clf, self.x_train_aug, self.y_train_aug, cv = 5, return_estimator=True)
-    print("5 fold scores:")
-    print(scores_5)
-    scores_7 = cross_validate(clf, self.x_train_aug, self.y_train_aug, cv = 7, return_estimator=True)
-    print("7 fold scores:")
-    print(scores_7)
-    scores_10 = cross_validate(clf, self.x_train_aug, self.y_train_aug, cv = 10, return_estimator=True)
-    print("10 fold scores:")
-    print(scores_10)
-
   def run_PCA(self, x_train: pd.DataFrame, x_test: pd.DataFrame):
     """
     Runs PCA to reduce dimensionality to self.n principal components.
-    :param x_train:
-    :param x_test:
+    :param x_train: pd.DataFrame of the training angles
+    :param x_test: pd.DataFrame of the testing angles
     :return:
     """
     pca = PCA(n_components=self.n_components, svd_solver = "full")
@@ -138,9 +118,10 @@ class RunRandomForestModel(object):
     return tpr, fpr, tnr, fnr
 
   def print_results(self):
-    '''
+    """
     Prints the hyperparemeters of the model, the execution times, accuracy and the confusion matrix.
-    '''
+    :return: None
+    """
     print(f"Number of PCs (0 if PCA was not done): {self.n_components}")
     print(f"Model Training execution time(seconds): {self.train_time_rf}")
     print(f"Model Testing execution time(seconds): {self.test_time_rf}")
@@ -157,13 +138,15 @@ class RunRandomForestModel(object):
     print(f"TPR: {tpr_st}, FPR: {fpr_st}, TNR: {tnr_st}, FNR: {fnr_st}")
     print("")
 
-  def run(self):
+  def run(self) -> Tuple[float, float, float, float, List, List, float, List] :
+    """
+    Runs Random Forest Model and prints out results.
+    :return: Model and PCA training and testing times, y_test, y_pred, accuracy, and x_train_aug.
+    """
     self.x_train_aug = self.open_csv(self.x_train_aug_file_path)
     self.y_train_aug = list(self.open_csv(self.y_train_aug_file_path)["CLASS"].values)
     self.x_test = self.open_csv(self.x_test_file_path)
     self.y_test = list(self.open_csv(self.y_test_file_path)["CLASS"].values)
-    if self.n_components > 0:
-      self.run_PCA(self.x_train_aug, self.x_test)
     self.random_forest_model()
     self.print_results()
     return self.train_time_rf, self.test_time_rf, self.train_time_pca, self.test_time_pca, self.y_test, self.y_pred, self.accuracy, self.x_train_aug
