@@ -7,7 +7,7 @@ class GetAngles(object):
   """
   def __init__(self):
     self.angle = []
-    self.magnitude = []
+    self.magnitude_list = []
     self.col_names = []
     self.origin = 8
     self.relative_coor = []
@@ -16,6 +16,20 @@ class GetAngles(object):
     self.x_relative_coor = []
     self.y_relative_coor = []
     self.coor = []
+
+  # def get_relative_coordinate(self):
+  #   '''
+  #   Sets the selected coordinate to be the origin and calculates the other coordinates wrt to the new origin.
+  #   '''
+  #   origin = self.coor[self.origin]
+  #   dim = np.shape(self.coor)
+  #   ones = np.ones([dim[0], 1])
+  #   x_origin = origin[0]
+  #   y_origin = origin[1]
+  #   self.x_relative_coor = [x - x_origin for x in self.x_coor]
+  #   self.y_relative_coor = [y_origin - y for y in self.y_coor]
+  #   self.relative_coor = np.array([[x, y] for x, y in zip(self.x_relative_coor, self.y_relative_coor)])
+  #   print("")
 
   def get_relative_coordinate(self):
     '''
@@ -41,8 +55,8 @@ class GetAngles(object):
     y = self.relative_coor[:, 1]
     squared_x = np.square(x)
     squared_y = np.square(y)
-    self.magnitude = np.sqrt(squared_x + squared_y)
-    inside = y/self.magnitude
+    self.mag = np.sqrt(squared_x + squared_y)
+    inside = y / self.mag
     self.angle = np.arccos(inside)
 
   def run(self):
@@ -144,6 +158,6 @@ class RunGetAngles(object):
 if __name__=="__main__":
   rungetangles = RunGetAngles()
   rungetangles.coor_csv_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\coor_train_all.csv"
-  rungetangles.angles_save_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\train_all_angle_o9_0.5.csv"
-  rungetangles.classes_save_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\train_all_class_o9_0.5.csv"
+  rungetangles.angles_save_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\train_all_angle_o9_0.59.csv"
+  rungetangles.classes_save_path = r"C:\Users\nguye\Documents\GitHub\asl_sentence_classification_project\data_csv\train_all_class_o9_0.59.csv"
   rungetangles.run()

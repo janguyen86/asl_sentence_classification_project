@@ -36,16 +36,20 @@ class RunRandomForestModel(object):
     self.test_time_rf = 0
 
   def open_csv(self, file_path: str) -> pd.DataFrame:
-    '''
+    """
     Read .csv file as pd.DataFrame
-    '''
+    :param file_path:
+    :return:
+    """
     df = pd.read_csv(file_path)
     return df
 
   def k_fold_validation(self, clf):
-    '''
+    """
     Perform k-fold validation on dataset for k = 5, 7 and 10.
-    '''
+    :param clf:
+    :return:
+    """
     scores_5 = cross_validate(clf, self.x_train_aug, self.y_train_aug, cv = 5, return_estimator=True)
     print("5 fold scores:")
     print(scores_5)
@@ -57,17 +61,21 @@ class RunRandomForestModel(object):
     print(scores_10)
 
   def run_PCA(self, x_train: pd.DataFrame, x_test: pd.DataFrame):
-    '''
+    """
     Runs PCA to reduce dimensionality to self.n principal components.
-    '''
+    :param x_train:
+    :param x_test:
+    :return:
+    """
     pca = PCA(n_components=self.n_components, svd_solver = "full")
     self.x_train_aug = pca.fit_transform(self.x_train_aug)
     self.x_test = pca.transform(self.x_test)
 
   def random_forest_model(self):
-    '''
+    """
     Runs random forest model on inputted data and calculates accuracy and confusion matrix using sklearn algorithms.
-    '''
+    :return: None
+    """
     clf = RandomForestClassifier(n_estimators=self.n_estimators, max_features="sqrt", random_state=0, min_samples_leaf = self.samples_leaf)
     start_train = time.time()
     if self.n_components > 0:
@@ -99,17 +107,15 @@ class RunRandomForestModel(object):
     self.accuracy = metrics.accuracy_score(self.y_test, self.y_pred)
 
   def calculate_metrics(self, class_type: str) -> Tuple[float, float, float, float]:
-    '''
+    """
     Calculates the true positive rate, false positive rate, true negative rate, and false negative rate.
-
-    Input:
-    class_type = Class type to calculate metrics for
-    Output:
+    :param class_type: class_type = Class type to calculate metrics for
+    :return:
     tpr = True positive rate
     fpr = False positive rate
     tnr = True negative rate
     fnr = False negative rate
-    '''
+    """
     tp = 0
     fp = 0
     tn = 0
@@ -161,8 +167,6 @@ class RunRandomForestModel(object):
     self.random_forest_model()
     self.print_results()
     return self.train_time_rf, self.test_time_rf, self.train_time_pca, self.test_time_pca, self.y_test, self.y_pred, self.accuracy, self.x_train_aug
-
-# parmeter types = pc, tree, leaf
 
 if __name__=="__main__":
   runrandomforestmodel = RunRandomForestModel()
